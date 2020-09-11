@@ -27,22 +27,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> taskTitles = [
-    'Understand Code',
-    'Figure out duplication',
-    'Refactor',
-    'Add comments',
-    'commit code',
-    'push to github',
-  ];
+  /*
+  Map<String, String> Task1 = {"task": 'Understand Code'};
+  Map<String, bool> State1 = {"set": true};
+  Map<String, String> Task2 = {"task": 'Figure out duplication'};
+  Map<String, bool> State2 = {"set": false};
+  Map<String, String> Task3 = {"task": 'Refactor'};
+  Map<String, bool> State3 = {"set": true};
+  Map<String, String> Task4 = {"task": 'Add comments'};
+  Map<String, bool> State4 = {"set": false};
+  Map<String, String> Task5 = {"task": 'commit code'};
+  Map<String, bool> State5 = {"set": false};
+  Map<String, String> Task6 = {"task": 'push to github'};
+  Map<String, bool> State6 = {"set": false};
+  */
 
-  List<bool> taskStates = [
-    true,
-    false,
-    true,
-    false,
-    false,
-    false,
+  List<Map<String, String>> Tasks = [
+    {"task": 'Understand Code'},
+    {"task": 'Figure out duplication'},
+    {"task": 'Refactor'},
+    {"task": 'Add comments'},
+    {"task": 'commit code'},
+    {"task": 'push to github'},
+  ];
+  List<Map<String, bool>> States = [
+    {"set": true},
+    {"set": false},
+    {"set": true},
+    {"set": false},
+    {"set": false},
+    {"set": false},
   ];
 
   @override
@@ -55,66 +69,49 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         color: Colors.teal,
         // REFACTOR INTO ListView.builder
-        child: ListView(children: <Widget>[
-          // REFACTOR OUT INTO STATEFUL TASK WIDGETS
-          Card(
-            child: CheckboxListTile(
-              value: taskStates[0],
-              onChanged: (newValue) {
-                setState(() {
-                  taskStates[0] = newValue;
-                });
-              },
-              activeColor: Colors.teal,
-              title: Text(taskTitles[0],
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontStyle:
-                        taskStates[0] ? FontStyle.italic : FontStyle.normal,
-                    color: taskStates[0] ? Colors.grey : Colors.black,
-                  )),
-              controlAffinity: ListTileControlAffinity.leading,
-            ),
-          ),
-          Card(
-            child: CheckboxListTile(
-              value: taskStates[1],
-              onChanged: (newValue) {
-                setState(() {
-                  taskStates[1] = newValue;
-                });
-              },
-              activeColor: Colors.teal,
-              title: Text(taskTitles[1],
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontStyle:
-                        taskStates[1] ? FontStyle.italic : FontStyle.normal,
-                    color: taskStates[1] ? Colors.grey : Colors.black,
-                  )),
-              controlAffinity: ListTileControlAffinity.leading,
-            ),
-          ),
-          Card(
-            child: CheckboxListTile(
-              value: taskStates[2],
-              onChanged: (newValue) {
-                setState(() {
-                  taskStates[2] = newValue;
-                });
-              },
-              activeColor: Colors.teal,
-              title: Text(taskTitles[2],
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontStyle:
-                        taskStates[2] ? FontStyle.italic : FontStyle.normal,
-                    color: taskStates[2] ? Colors.grey : Colors.black,
-                  )),
-              controlAffinity: ListTileControlAffinity.leading,
-            ),
-          ),
-        ]),
+        child: ListView.builder(
+          itemCount: Tasks.length,
+          itemBuilder: (context, i) {
+            return TaskList(Tasks[i]["task"], States[i]["set"]);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class TaskList extends StatefulWidget {
+  String thing;
+  bool checked;
+  TaskList(this.thing, this.checked);
+
+  @override
+  _TaskListState createState() => _TaskListState(thing, checked);
+}
+
+class _TaskListState extends State<TaskList> {
+  String thing;
+  bool checked;
+  _TaskListState(this.thing, this.checked);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: CheckboxListTile(
+        value: checked,
+        onChanged: (newValue) {
+          setState(() {
+            checked = newValue;
+          });
+        },
+        activeColor: Colors.teal,
+        title: Text(thing,
+            style: TextStyle(
+              fontSize: 20,
+              fontStyle: checked ? FontStyle.italic : FontStyle.normal,
+              color: checked ? Colors.grey : Colors.black,
+            )),
+        controlAffinity: ListTileControlAffinity.leading,
       ),
     );
   }
